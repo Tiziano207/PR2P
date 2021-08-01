@@ -1,15 +1,9 @@
 import java.util.*;
-//PER IL FILTERED HO COSTRUITO UN FILTRO SUL POST CHE VIENE IMMESSO NELLA RETE SOCIALE CHE PUò ESSERE CONSIDERATO OFFENSIVO, IMPLEMENTANDO LA QUESTA SCELTA CON UN ARRAY DI STRINGHE
-//CHE CONTENGONO TUTTE LE PAROLE BANNATE DAI SOCIAL
-
-//COME SECONDA COSA HO CREATO UN SISTEMA DI SEGNALAZIONE DEI POST
-//FUNZIONA COS^: A DUE SEGNALAZIONI VIENE TOLTO IL POST DALLA RETE SOCIALE 
-// ** DA IMPLEMENTARE ** LE SEGNALAZIONI DEVONO ARRIVARE DA DUE PERSONE DIVERSE 
 
 public class SocialNetworkRepostOffensivePost extends SocialNetwork {
     private List<String> blackList = new ArrayList<String>();
-    private ArrayList<Post> blackListPost = new ArrayList<Post>();
     private HashMap<Integer, Integer> reportedPost = new HashMap<>();
+    private HashMap<Integer, ArrayList<String>> offensivePostSegnalation = new HashMap<>();
 
     public SocialNetworkRepostOffensivePost() {
     }
@@ -18,7 +12,7 @@ public class SocialNetworkRepostOffensivePost extends SocialNetwork {
     public void addPost(Post ps) throws ExplicitLanguageException {
         for (String badWord : blackList) {
             if (!ps.getText().contains(badWord))
-                super.getPost.put(ps.getIDPost(), ps);
+                super.getPost().put(ps.getIDPost(), ps);
             else
                 throw new ExplicitLanguageException("You can't use strong Language");
         }
@@ -38,24 +32,37 @@ public class SocialNetworkRepostOffensivePost extends SocialNetwork {
         return;
     }
 
-    public void controlReport(Post ps) {
-        if (!super.getPost().containsKey(ps.getIDPost())) {
-            System.out.println("Il Post è stato rimosso");
-            return;
-        }
-        if (reportedPost.get(ps.getIDPost()) >= 2) {
-            System.out.println("Le segnalazioni sono diventate Troppe il Post sarà rimosso");
-            removeOffensivePost(ps);
+    public void addReport(Post ps, String reporter) {
+        if (!offensivePostSegnalation.get(ps.getIDPost()).contains(reporter)) {
+            offensivePostSegnalation.put(ps.getIDPost(), new ArrayList<String>());
+            offensivePostSegnalation.get(ps.getIDPost()).add(reporter);
+            System.out.println("Il Post è stato segnalato");
+        } else {
+            System.out.println("Hai già segnalato questo Post");
         }
         return;
     }
 
-    public void removeOffensivePost(Post ps) {
-        super.getPost.remove(ps.getIDPost());
-        blackListPost.remove(ps);
-        return;
+    public void controlReportMap() {
+        for (Integer i : offensivePostSegnalation.keySet()) {
+            if (offensivePostSegnalation.get(i).size() >= 2) {
+                offensivePostSegnalation.remove(i);
+                super.getPost().remove(i);
+            }
+        }
     }
 
+    /*
+     * public void controlReport(Post ps) { if
+     * (!super.getPost().containsKey(ps.getIDPost())) {
+     * System.out.println("Il Post è stato rimosso"); return; } if
+     * (reportedPost.get(ps.getIDPost()) >= 2) { System.out.
+     * println("Le segnalazioni sono diventate Troppe il Post sarà rimosso");
+     * removeOffensivePost(ps); } return; }
+     * 
+     * public void removeOffensivePost(Post ps) {
+     * super.getPost().remove(ps.getIDPost()); return; }
+     */
     public List<String> getBlackList() {
         return blackList;
     }
@@ -69,10 +76,6 @@ public class SocialNetworkRepostOffensivePost extends SocialNetwork {
 
     public void removeWordBlacklist(String badWord) {
         blackList.remove(badWord);
-    }
-
-    public HashMap<Integer, Post> getPost() {
-        return super.getPost();
     }
 
 }
