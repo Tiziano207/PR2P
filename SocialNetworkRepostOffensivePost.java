@@ -1,20 +1,18 @@
 import java.util.*;
 
 public class SocialNetworkRepostOffensivePost extends SocialNetwork {
-    private HashMap<Integer, Post> postMap1;
     private List<String> blackList = new ArrayList<String>();
     private ArrayList<Post> blackListPost = new ArrayList<Post>();
     private HashMap<Integer, Integer> reportedPost = new HashMap<>();
 
     public SocialNetworkRepostOffensivePost() {
-        postMap1 = new HashMap<Integer, Post>();
     }
 
     // controllo dei post che vengono immessi nella rete
     public void addPost(Post ps) throws ExplicitLanguageException {
         for (String badWord : blackList) {
             if (!ps.getText().contains(badWord))
-                postMap1.put(ps.getIDPost(), ps);
+                super.getPost.put(ps.getIDPost(), ps);
             else
                 throw new ExplicitLanguageException("You can't use strong Language");
         }
@@ -35,7 +33,7 @@ public class SocialNetworkRepostOffensivePost extends SocialNetwork {
     }
 
     public void controlReport(Post ps) {
-        if (!postMap1.containsKey(ps.getIDPost())) {
+        if (!super.getPost().containsKey(ps.getIDPost())) {
             System.out.println("Il Post è stato rimosso");
             return;
         }
@@ -47,7 +45,7 @@ public class SocialNetworkRepostOffensivePost extends SocialNetwork {
     }
 
     public void removeOffensivePost(Post ps) {
-        postMap1.remove(ps.getIDPost());
+        super.getPost.remove(ps.getIDPost());
         blackListPost.remove(ps);
         return;
     }
@@ -68,7 +66,7 @@ public class SocialNetworkRepostOffensivePost extends SocialNetwork {
     }
 
     public HashMap<Integer, Post> getPost() {
-        return postMap1;
+        return super.getPost();
     }
 
 }
