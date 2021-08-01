@@ -31,7 +31,8 @@ public class SocialNetworkRepostOffensivePost extends SocialNetwork {
         }
         return;
     }
-
+//implementazione senza doppie segnalazioni da un utente
+    
     public void addReport(Post ps, String reporter) {
         if (!offensivePostSegnalation.get(ps.getIDPost()).contains(reporter)) {
             offensivePostSegnalation.put(ps.getIDPost(), new ArrayList<String>());
